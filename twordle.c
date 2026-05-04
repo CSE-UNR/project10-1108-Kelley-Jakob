@@ -35,56 +35,50 @@ int main(){
 	playerguess(guess, count + 1);
 
 	if(correctguess(guess)){
+		lowercase(guess);
+		guesscheck(guess, word, displayguess[count], hints[count]);
+		if(lettercase(displayguess[count])){
+			won = 1;
+		}
 
-	lowercase(guess);
-
-	guesscheck(guess, word, displayguess[count], hints[count]);
-
-	if(lettercase(displayguess[count])){
-	won = 1;
-	}
-
-	count++;
-
-	if(count == MAX_GUESSES || won){
-
-	if(won && count == 1){
-	printf("================================\n");
-	printf("\t\t%s\n", displayguess[0]);
-	printf("\tYou won in 1 guess!\n");
-	printf("\t\tGOATED!\n");
-	}
-	else if(won){
-	printf("================================\n");
-	array(displayguess, hints, count);
-	printf("You won in %d guesses!\n", count);
-	}
-	else{
-	printf("FINAL GUESS : %s\n", guess);
-	printf("================================\n");
-	array(displayguess, hints, count);
-	printf("You lost, better luck next time!\n");
-	}
-
-	}
-	else{
-	printf("================================\n");
-	array(displayguess, hints, count);
-	}
-
-	}
-	else{
-	printf("Your guess must be 5 letters long.\n", WORDLENGTH);
+		count++;
+		if(count == MAX_GUESSES || won){
+			if(won){
+				if(count == 1){
+					printf("================================\n");
+					printf("\t\t%s\n", displayguess[0]);
+					printf("\tYou won in 1 guess!\n");
+					printf("\t\tGOATED!\n");
+				}
+			else{
+				printf("================================\n");
+				array(displayguess, hints, count);
+				printf("You won in %d guesses!\n", count);
+			}
+		}
+			else{
+				printf("FINAL GUESS : %s\n", guess);
+				printf("================================\n");
+				array(displayguess, hints, count);
+				printf("You lost, better luck next time!\n");
+			}
+	
+		//printf("Your guess must be 5 letters long.\n");
+		}
+		else{
+			printf("================================\n");
+			array(displayguess, hints, count);
+		}
 	}
 	}
-
+	
 	return 0;
 }
 
 void wordcheck(char word[]){//reads the word from the txt file, 5 letters only
 	FILE *file = fopen(FILE_NAME, "r");
 	if (file == NULL){
-	printf("Could not open %s\n", FILE_NAME);
+		printf("Could not open %s\n", FILE_NAME);
 	}
 
 	fgets(word, WORDLENGTH + 1, file);
@@ -104,13 +98,13 @@ int correctguess(char guess[]){//makes sure the guess is all letters and contain
 	int index;
 
 	if(length != WORDLENGTH){
-	return 0;
+		return 0;
 	}
 
 	for(index = 0; index < WORDLENGTH; index++){
-	if(!(guess[index] >= 'a' && guess[index] <= 'z') && !(guess[index] >= 'A' && guess[index] <= 'Z')){
-	return 0;
-	}
+		if(!(guess[index] >= 'a' && guess[index] <= 'z') && !(guess[index] >= 'A' && guess[index] <= 'Z')){
+		return 0;
+		}
 	}
 
 	return 1;
@@ -120,10 +114,10 @@ void lowercase(char lower[]){//helps to convert any letters to lowercase to be c
 	int index = 0;
 
 	while(lower[index]){
-	if(lower[index] >= 'A' && lower[index] <= 'Z'){
-	lower[index] += 32;//ascii conversion for upper/lowercase
-	}
-	index++;
+		if(lower[index] >= 'A' && lower[index] <= 'Z'){
+			lower[index] += 32;//ascii conversion for upper/lowercase
+		}
+		index++;
 	}
 }
 
@@ -132,29 +126,28 @@ void guesscheck(char guess[], char word[], char displayguess[], char hints[]){//
 	int index, index2;
 
 	for(index = 0; index < WORDLENGTH; index++){
-	displayguess[index] = guess[index];
-	hints[index] = ' ';
+		displayguess[index] = guess[index];
+		hints[index] = ' ';
 	}
 
 	for(index = 0; index < WORDLENGTH; index++){
-	if(guess[index] == word[index]){
-	displayguess[index] = guess[index] - 32;//second ascii conversion for upper/lowercase
-	used[index] = 1;
-	}
+		if(guess[index] == word[index]){
+		displayguess[index] = guess[index] - 32;//second ascii conversion for upper/lowercase
+		used[index] = 1;
+		}
 	}
 
 	for(index = 0; index < WORDLENGTH; index++){
+		if(!(displayguess[index] >= 'A' && displayguess[index] <= 'Z')){
 
-	if(!(displayguess[index] >= 'A' && displayguess[index] <= 'Z')){
-
-	for(index2 = 0; index2 < WORDLENGTH; index2++){
-	if(!used[index2] && guess[index] == word[index2]){
-	hints[index] = '^';
-	used[index2] = 1;
-	break;//loop i attempted to use kept breaking code, found this as a short solution?
-	}
-	}
-	}
+			for(index2 = 0; index2 < WORDLENGTH; index2++){
+				if(!used[index2] && guess[index] == word[index2]){
+					hints[index] = '^';
+					used[index2] = 1;
+					break;//loop i attempted to use kept breaking code, found this as a short solution?
+				}
+			}
+		}
 	}
 }
 
@@ -163,13 +156,13 @@ void array(char displayguess[][WORDLENGTH + 1], char hints[][WORDLENGTH + 1], in
 
 	for(row = 0; row < count; row++){
 
-	printf("%s\n", displayguess[row]);
+		printf("%s\n", displayguess[row]);
 
-	for(column = 0; column < WORDLENGTH; column++){
-	printf("%c", hints[row][column]);
-	}
+		for(column = 0; column < WORDLENGTH; column++){
+			printf("%c", hints[row][column]);
+		}
 
-	printf("\n");
+		printf("\n");
 	}
 }
 
@@ -177,8 +170,8 @@ int lettercase(char displayguess[]){//checks for word uppercase and matches to t
 	int index;
 
 	for(index = 0; index < WORDLENGTH; index++){
-	if(displayguess[index] < 'A' || displayguess[index] > 'Z'){
-	return 0;
+		if(displayguess[index] < 'A' || displayguess[index] > 'Z'){
+		return 0;
 	}
 	}
 
@@ -189,7 +182,7 @@ int stringlength(char length[]){//used to count word characters up to newline
 	int index = 0;
 
 	while(length[index]){
-	index++;
+		index++;
 	}
 
 	return index;
@@ -199,12 +192,12 @@ void nulldelete(char buffer[]){//removed the newline from the world so it can be
 	int index = 0;
 
 	while(buffer[index]){
-	if(buffer[index] == '\n'){
+		if(buffer[index] == '\n'){
 	
-	buffer[index] = '\0';
-	return;
-	}
-	index++;
+		buffer[index] = '\0';
+		return;
+		}
+		index++;
 	}
 }
 
