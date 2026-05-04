@@ -172,7 +172,7 @@ int lettercase(char displayguess[]){//checks for word uppercase and matches to t
 	for(index = 0; index < WORDLENGTH; index++){
 		if(displayguess[index] < 'A' || displayguess[index] > 'Z'){
 		return 0;
-	}
+		}
 	}
 
 	return 1;
